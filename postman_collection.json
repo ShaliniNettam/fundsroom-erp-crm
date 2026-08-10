@@ -1,0 +1,234 @@
+{
+  "info": {
+    "name": "Mini ERP + CRM Operations Portal API Collection",
+    "description": "Complete REST API collection for Mini ERP + CRM Portal including Authentication, Customer CRM, Products, Inventory Stock Log, Sales Challan Stock Control, and Dashboard APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login - Admin Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@erp.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Sales Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sales@erp.com\",\n  \"password\": \"Sales@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customer CRM",
+      "item": [
+        {
+          "name": "Get Customers (Search & Filter)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/customers?search=&customerType=WHOLESALE&page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["customers"] }
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Vikram Malhotra\",\n  \"mobile\": \"+919876500000\",\n  \"email\": \"vikram@apexsolutions.com\",\n  \"businessName\": \"Apex Distribution Hub\",\n  \"gstNumber\": \"27DDDFF3333D4Z2\",\n  \"customerType\": \"DISTRIBUTOR\",\n  \"address\": \"78 Logistics Park, Highway 48, Pune, MH\",\n  \"status\": \"ACTIVE\",\n  \"followUpDate\": \"2026-08-20\",\n  \"notes\": \"Initial order discussions pending confirmation.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/customers", "host": ["{{baseUrl}}"], "path": ["customers"] }
+          }
+        },
+        {
+          "name": "Get Customer By ID (With Timeline Notes & Sales)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/customers/:id", "host": ["{{baseUrl}}"], "path": ["customers", ":id"] }
+          }
+        },
+        {
+          "name": "Add Follow-up Note",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Discussed wholesale credit terms. Client agreed to pay 30% advance on confirm.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/customers/:id/notes", "host": ["{{baseUrl}}"], "path": ["customers", ":id", "notes"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products & Inventory",
+      "item": [
+        {
+          "name": "Get Products (Catalog & Low Stock Filter)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/products?lowStock=false&page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["products"] }
+          }
+        },
+        {
+          "name": "Create Product Master",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ultra HD Webcam 1080p\",\n  \"sku\": \"PRD-CAM-006\",\n  \"category\": \"Peripherals\",\n  \"unitPrice\": 65.00,\n  \"currentStock\": 25,\n  \"minStockAlert\": 5,\n  \"location\": \"Warehouse A - Rack 3\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] }
+          }
+        },
+        {
+          "name": "Get Stock Movements Log",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/stock-movements?page=1&limit=15", "host": ["{{baseUrl}}"], "path": ["stock-movements"] }
+          }
+        },
+        {
+          "name": "Record Manual Stock Adjustment (IN/OUT)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"<PRODUCT_ID>\",\n  \"quantity\": 10,\n  \"movementType\": \"IN\",\n  \"reason\": \"Purchase Inward Receipt PO #405\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/stock-movements", "host": ["{{baseUrl}}"], "path": ["stock-movements"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales Challans (Stock Control)",
+      "item": [
+        {
+          "name": "Get Sales Challans",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/sales-challans", "host": ["{{baseUrl}}"], "path": ["sales-challans"] }
+          }
+        },
+        {
+          "name": "Create Sales Challan (With Product Snapshot Data)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"<CUSTOMER_ID>\",\n  \"status\": \"DRAFT\",\n  \"items\": [\n    {\n      \"productId\": \"<PRODUCT_ID>\",\n      \"quantity\": 2\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/sales-challans", "host": ["{{baseUrl}}"], "path": ["sales-challans"] }
+          }
+        },
+        {
+          "name": "Confirm Sales Challan (Transactional Stock Control)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/sales-challans/:id/status", "host": ["{{baseUrl}}"], "path": ["sales-challans", ":id", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Stats",
+      "item": [
+        {
+          "name": "Get Operations Dashboard Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/dashboard/stats", "host": ["{{baseUrl}}"], "path": ["dashboard", "stats"] }
+          }
+        }
+      ]
+    }
+  ]
+}
