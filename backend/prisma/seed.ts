@@ -13,7 +13,7 @@ async function main() {
   await prisma.customerNote.deleteMany();
   await prisma.product.deleteMany();
   await prisma.customer.deleteMany();
-  await prisma.user.deleteMany();
+  // Removed user deleteMany for idempotency
 
   // 2. Create Users for all 4 roles
   const passwordHash = await bcrypt.hash('Admin@123', 10);
@@ -21,8 +21,10 @@ async function main() {
   const warehouseHash = await bcrypt.hash('Warehouse@123', 10);
   const accountsHash = await bcrypt.hash('Accounts@123', 10);
 
-  const admin = await prisma.user.create({
-    data: {
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@erp.com' },
+    update: {},
+    create: {
       name: 'System Admin',
       email: 'admin@erp.com',
       passwordHash,
@@ -30,8 +32,10 @@ async function main() {
     },
   });
 
-  const salesUser = await prisma.user.create({
-    data: {
+  const salesUser = await prisma.user.upsert({
+    where: { email: 'sales@erp.com' },
+    update: {},
+    create: {
       name: 'Sales Manager',
       email: 'sales@erp.com',
       passwordHash: salesHash,
@@ -39,8 +43,10 @@ async function main() {
     },
   });
 
-  const warehouseUser = await prisma.user.create({
-    data: {
+  const warehouseUser = await prisma.user.upsert({
+    where: { email: 'warehouse@erp.com' },
+    update: {},
+    create: {
       name: 'Warehouse Supervisor',
       email: 'warehouse@erp.com',
       passwordHash: warehouseHash,
@@ -48,8 +54,10 @@ async function main() {
     },
   });
 
-  const accountsUser = await prisma.user.create({
-    data: {
+  const accountsUser = await prisma.user.upsert({
+    where: { email: 'accounts@erp.com' },
+    update: {},
+    create: {
       name: 'Accounts Officer',
       email: 'accounts@erp.com',
       passwordHash: accountsHash,
