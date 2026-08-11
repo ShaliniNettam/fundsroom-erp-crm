@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://fundsroom-erp-backend-havz.onrender.com/api/$1"
+    }
+  ]
+}
