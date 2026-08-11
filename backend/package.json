@@ -10,7 +10,7 @@
     "prisma:generate": "prisma generate --schema=prisma/schema.prisma",
     "prisma:push": "prisma db push --schema=prisma/schema.prisma",
     "db:setup:pg": "npx prisma db push --schema=prisma/schema.prisma && tsx prisma/seed.ts",
-    "db:setup:sqlite": "npx prisma db push --schema=prisma/schema.prisma && tsx prisma/seed.ts"
+    "db:setup:sqlite": "npx prisma db push --schema=prisma/schema.prisma && tsx prisma/seed.ts",
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
